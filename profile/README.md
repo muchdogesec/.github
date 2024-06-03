@@ -1,6 +1,6 @@
 # About DOGESEC
 
-![David Greenwood DOGESEC](david-greenwood-presenting.jpeg)
+![David Greenwood DOGESEC](https://raw.githubusercontent.com/muchdogesec/.github/main/profile/david-greenwood-presenting.jpeg)
 
 Hi! I'm Dave, founder DOGESEC!
 
