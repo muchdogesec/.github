@@ -1,8 +1,6 @@
-# About dogesec
+# we're dogesec 👋
 
 ![muchdogesec](https://raw.githubusercontent.com/muchdogesec/.github/main/profile/much_security.png)
-
-👋
 
 we build software for cyber threat intelligence analysts.
 
