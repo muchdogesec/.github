@@ -3,17 +3,16 @@ name: Reusable Dependabot approval and auto-merge
 on:
   workflow_call:
     inputs:
-      run-id:
-        description: Successful pull-request workflow run ID
+      pr-number:
+        description: Pull request associated with the successful workflow run
         required: true
-        type: string
+        type: number
       head-sha:
         description: Commit SHA validated by the successful workflow run
         required: true
         type: string
 
 permissions:
-  actions: read
   contents: write
   pull-requests: write
 
@@ -24,27 +23,12 @@ jobs:
       - name: Approve and enable auto-merge for the validated Dependabot PR
         env:
           GH_TOKEN: ${{ github.token }}
-          RUN_ID: ${{ inputs.run-id }}
+          PR_NUMBER: ${{ inputs.pr-number }}
           VALIDATED_HEAD_SHA: ${{ inputs.head-sha }}
         run: |
           set -euo pipefail
 
-          mapfile -t pr_numbers < <(
-            gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${RUN_ID}/pulls" \
-              --jq '.[].number'
-          )
-
-          if [[ ${#pr_numbers[@]} -eq 0 ]]; then
-            echo "The successful workflow run is not associated with a pull request."
-            exit 0
-          fi
-
-          if [[ ${#pr_numbers[@]} -ne 1 ]]; then
-            echo "Expected one pull request for workflow run ${RUN_ID}."
-            exit 1
-          fi
-
-          pr_number="${pr_numbers[0]}"
+          pr_number="$PR_NUMBER"
           author="$(
             gh api "repos/${GITHUB_REPOSITORY}/pulls/${pr_number}" \
               --jq '.user.login'
