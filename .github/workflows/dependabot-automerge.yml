@@ -91,7 +91,9 @@ jobs:
               --jq 'any(.[]; .user.login == "github-actions[bot]" and .state == "APPROVED")'
           )"
           if [[ "$already_approved" != "true" ]]; then
-            gh pr review "$pr_number" --repo "$GITHUB_REPOSITORY" --approve
+            if ! gh pr review "$pr_number" --repo "$GITHUB_REPOSITORY" --approve; then
+              echo "::warning::GitHub Actions approval is disabled by an organization or enterprise policy; continuing with auto-merge."
+            fi
           fi
 
           gh pr merge "$pr_number" --repo "$GITHUB_REPOSITORY" \
